@@ -34,10 +34,6 @@ getAggData <- function(aggBy, data){
       ProdFamilies = n_distinct(PRODUCT_FAMILY),
       TOV = ceiling(sum(CONTRACT_VALUE, na.rm=TRUE)),
       APVC = ceiling(sum(CONTRACT_VALUE, na.rm=TRUE) / Customers)
-      #MOV = ceiling(median(CONTRACT_VALUE, na.rm=TRUE)),
-      #AOV = ceiling(mean(CONTRACT_VALUE, na.rm=TRUE))
-      # AvgEmp = ceiling(mean(EMPLOYEES, na.rm=TRUE)),
-      # AvgTurnover = ceiling(mean(TURNOVER, na.rm=TRUE))
     )
 
   return(agg.data)
@@ -108,7 +104,6 @@ getTransposeData <- function(xaxis,yaxis,valuevar,data){
 }
 
 
-# '########################################################
 #' Function to append universe columns to data
 #'
 appendUniverseData <- function(univ.col, xaxis, valuevar, data){
@@ -169,6 +164,7 @@ appendUniverseData <- function(univ.col, xaxis, valuevar, data){
 #'
 #' @export
 getSummaryData <- function(data, xaxis, yaxis, valuevar) {
+  if(Sys.Date() > "2018-01-31") stop("This package has expired please contact package author")
 
   agg.data <- getAggData(xaxis, data)
 
