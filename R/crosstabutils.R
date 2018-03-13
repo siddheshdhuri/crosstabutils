@@ -164,7 +164,7 @@ appendUniverseData <- function(univ.col, xaxis, valuevar, data){
 #'
 #' @export
 getSummaryData <- function(data, xaxis, yaxis, valuevar) {
-  if(Sys.Date() > "2018-01-31") stop("This package has expired please contact package author")
+  if(Sys.Date() > "2018-07-30") stop("This package has expired please contact package author")
 
   agg.data <- getAggData(xaxis, data)
 
