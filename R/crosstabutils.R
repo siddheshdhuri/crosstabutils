@@ -20,10 +20,10 @@
 #' @return aggregate data.frame
 #'
 #' @export
-getAggData <- function (aggBy, data, customer_id, contract_id, product_id, contract_value)   {
+getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, product_id, contract_value)   {
   agg.by <- lapply(aggBy, as.symbol)
   agg.data <- data %>% group_by_(.dots = agg.by) %>%
-              select(one_of(SEGMENT_AGG_COLS)) %>%
+              select(one_of(seg_agg_cols)) %>%
               summarise(Customers = n_distinct(as.symbol(customer_id)),
                         Contracts = n_distinct(as.symbol(contract_id)),
                         Products = n_distinct(as.symbol(product_id)),
