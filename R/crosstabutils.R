@@ -20,24 +20,18 @@
 #' @return aggregate data.frame
 #'
 #' @export
-getAggData <- function(aggBy, data){
-
+getAggData <- function (aggBy, data, customer_id, contract_id, product_id, contract_value)   {
   agg.by <- lapply(aggBy, as.symbol)
-
-  agg.data <- data %>%
-    group_by_(.dots = agg.by) %>%
-    select(SOLDTO_GUO_NAME, ACCOUNT_SFDC_ID, CONTRACT_SOLDTOID,  CONTRACT_SAP_ID, PRODUCT_CODE, PRODUCT_FAMILY ,CONTRACT_VALUE, NUMBEROFEMPLOYEES, ANNUALREVENUE) %>%
-    summarise(
-      Customers = n_distinct(ACCOUNT_SFDC_ID),
-      Contracts = n_distinct(CONTRACT_SAP_ID),
-      Products = n_distinct(PRODUCT_CODE),
-      ProdFamilies = n_distinct(PRODUCT_FAMILY),
-      TOV = ceiling(sum(CONTRACT_VALUE, na.rm=TRUE)),
-      APVC = ceiling(sum(CONTRACT_VALUE, na.rm=TRUE) / Customers)
-    )
+  agg.data <- data %>% group_by_(.dots = agg.by) %>%
+              select(one_of(SEGMENT_AGG_COLS)) %>%
+              summarise(Customers = n_distinct(as.symbol(customer_id)),
+                        Contracts = n_distinct(as.symbol(contract_id)),
+                        Products = n_distinct(as.symbol(product_id)),
+                        TOV = sum(contract_value,  na.rm = TRUE),
+                        APVC = sum(contract_value,  na.rm = TRUE) / Customers
+  )
 
   return(agg.data)
-
 }
 
 #' Function to transpose column given data frame
@@ -164,7 +158,6 @@ appendUniverseData <- function(univ.col, xaxis, valuevar, data){
 #'
 #' @export
 getSummaryData <- function(data, xaxis, yaxis, valuevar) {
-  if(Sys.Date() > "2020-12-01") stop("This package has expired please contact package author")
 
   agg.data <- getAggData(xaxis, data)
 
