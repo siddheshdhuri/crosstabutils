@@ -30,7 +30,7 @@ getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, pro
               TOV = sum(.data[[contract_value]],  na.rm = TRUE),
               APVC = sum(.data[[contract_value]],  na.rm = TRUE) / Customers
     )
-  
+
   return(agg.data)
 }
 
@@ -168,7 +168,8 @@ getSummaryData <- function(data, xaxis, yaxis, valuevar,
   if("NONE" == yaxis){
     transposed.data <- agg.data
   }else{
-    transposed.data <- getTransposeData(xaxis,yaxis,valuevar,data)
+    transposed.data <- getTransposeData(xaxis,yaxis,valuevar,data,
+                                        seg_agg_cols, customer_id, contract_id, product_id, contract_value)
   }
 
 
