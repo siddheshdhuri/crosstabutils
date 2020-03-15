@@ -23,14 +23,14 @@
 getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, product_id, contract_value)   {
   agg.by <- lapply(aggBy, as.symbol)
   agg.data <- data %>% group_by_(.dots = agg.by) %>%
-              select(one_of(seg_agg_cols)) %>%
-              summarise(Customers = n_distinct(as.symbol(customer_id)),
-                        Contracts = n_distinct(as.symbol(contract_id)),
-                        Products = n_distinct(as.symbol(product_id))
-                        #TOV = sum(as.symbol(contract_value),  na.rm = TRUE),
-                        #APVC = sum(as.symbol(contract_value),  na.rm = TRUE) / Customers
-  )
-
+    select(one_of(seg_agg_cols)) %>%
+    summarise(Customers = n_distinct(.data[[customer_id]]),
+              Contracts = n_distinct(.data[[contract_id]]),
+              Products = n_distinct(.data[[product_id]]),
+              TOV = sum(.data[[contract_value]],  na.rm = TRUE),
+              APVC = sum(.data[[contract_value]],  na.rm = TRUE) / Customers
+    )
+  
   return(agg.data)
 }
 
