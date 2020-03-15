@@ -27,8 +27,8 @@ getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, pro
               summarise(Customers = n_distinct(as.symbol(customer_id)),
                         Contracts = n_distinct(as.symbol(contract_id)),
                         Products = n_distinct(as.symbol(product_id)),
-                        TOV = sum(contract_value,  na.rm = TRUE),
-                        APVC = sum(contract_value,  na.rm = TRUE) / Customers
+                        TOV = sum(as.symbol(contract_value),  na.rm = TRUE),
+                        APVC = sum(as.symbol(contract_value),  na.rm = TRUE) / Customers
   )
 
   return(agg.data)
@@ -44,11 +44,13 @@ getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, pro
 #' @return crostab data.frame
 #'
 #' @export
-getTransposeData <- function(xaxis,yaxis,valuevar,data){
+getTransposeData <- function(xaxis,yaxis,valuevar,data,
+                             seg_agg_cols, customer_id, contract_id, product_id, contract_value){
 
   if(valuevar == "Penetration") valuevar <- "Customers"
 
-  agg.data <- getAggData(c(xaxis,yaxis), data)
+  agg.data <- getAggData(c(xaxis,yaxis), data,
+                         seg_agg_cols, customer_id, contract_id, product_id, contract_value)
 
   dependent <- yaxis
   factors <- setdiff(xaxis,dependent)
@@ -157,9 +159,11 @@ appendUniverseData <- function(univ.col, xaxis, valuevar, data){
 #' @return summarised data.frame
 #'
 #' @export
-getSummaryData <- function(data, xaxis, yaxis, valuevar) {
+getSummaryData <- function(data, xaxis, yaxis, valuevar,
+                           seg_agg_cols, customer_id, contract_id, product_id, contract_value) {
 
-  agg.data <- getAggData(xaxis, data)
+  agg.data <- getAggData(xaxis, data,
+                         seg_agg_cols, customer_id, contract_id, product_id, contract_value)
 
   if("NONE" == yaxis){
     transposed.data <- agg.data
