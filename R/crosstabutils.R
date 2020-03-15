@@ -26,9 +26,9 @@ getAggData <- function (aggBy, data, seg_agg_cols, customer_id, contract_id, pro
               select(one_of(seg_agg_cols)) %>%
               summarise(Customers = n_distinct(as.symbol(customer_id)),
                         Contracts = n_distinct(as.symbol(contract_id)),
-                        Products = n_distinct(as.symbol(product_id)),
-                        TOV = sum(as.symbol(contract_value),  na.rm = TRUE),
-                        APVC = sum(as.symbol(contract_value),  na.rm = TRUE) / Customers
+                        Products = n_distinct(as.symbol(product_id))
+                        #TOV = sum(as.symbol(contract_value),  na.rm = TRUE),
+                        #APVC = sum(as.symbol(contract_value),  na.rm = TRUE) / Customers
   )
 
   return(agg.data)
